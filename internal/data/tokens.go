@@ -12,15 +12,16 @@ import (
 )
 
 const (
-	ScopeActivation = "activation"
+	ScopeActivation     = "activation"
+	ScopeAuthentication = "authentication"
 )
 
 type Token struct {
-	Plaintext string
-	Hash      []byte
-	UserID    int64
-	Expiry    time.Time
-	Scope     string
+	Plaintext string    `json:"token"`
+	Hash      []byte    `json:"-"`
+	UserID    int64     `json:"-"`
+	Expiry    time.Time `json:"expiry"`
+	Scope     string    `json:"-"`
 }
 
 func generateToken(userID int64, ttl time.Duration, scope string) (*Token, error) {
@@ -32,15 +33,17 @@ func generateToken(userID int64, ttl time.Duration, scope string) (*Token, error
 
 	randomBytes := make([]byte, 16)
 
+	// filling this []byte slice with random entries
 	_, err := rand.Read(randomBytes)
 	if err != nil {
 		return nil, err
 	}
 
+	// padding is = at the end of the token that we are avoiding here
 	token.Plaintext = base32.StdEncoding.WithPadding(base32.NoPadding).EncodeToString(randomBytes)
 
 	hash := sha256.Sum256([]byte(token.Plaintext))
-	token.Hash = hash[:]
+	token.Hash = hash[:] // token.Hash is array and that's not acceptable to the pq driver that's why converting to slice
 
 	return token, nil
 }
