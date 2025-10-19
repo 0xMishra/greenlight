@@ -19,7 +19,7 @@ func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, st
 		"error": message,
 	}
 
-	err := app.writeToJSON(w, status, env, nil)
+	err := app.writeJSON(w, status, env, nil)
 	if err != nil {
 		app.logError(r, err)
 		w.WriteHeader(500)
