@@ -8,46 +8,37 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## MakeFile
 
-Run build make command with tests
+Run api without building the binaries:
 ```bash
-make all
+make run/api
 ```
 
-Build the application
+Connect to the database:
 ```bash
-make build
+make db/psql
 ```
 
-Run the application
+Create a new database migration:
 ```bash
-make run
-```
-Create DB container
-```bash
-make docker-run
+make db/migrations/new
 ```
 
-Shutdown DB Container
+Apply database migrations:
 ```bash
-make docker-down
+make db/migrations/up
 ```
 
-DB Integrations Test:
+Format all .go files and tidy module dependencies:
 ```bash
-make itest
+make tidy
 ```
 
-Live reload the application:
+Run quality control checks:
 ```bash
-make watch
+make audit
 ```
 
-Run the test suite:
+Build the application:
 ```bash
-make test
-```
-
-Clean up binary from the last build:
-```bash
-make clean
+make build/api
 ```
